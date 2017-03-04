@@ -1,0 +1,27 @@
+.dialog {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    //border-style: solid;
+    //border-radius: 5px;
+    padding: 15px;
+    //border-color: blue;
+    //min-width:600px;
+    width:400px;
+    height:350px;
+}
+.centerElements {
+    justify-content:center;
+    //justify-content: flex-start;
+    flex-direction:column;
+    align-items: center;
+    height:100%;
+}
+.errormessage {
+    color: red;
+    font-size: small;
+    font-style: italic;
+    height:10px;
+}

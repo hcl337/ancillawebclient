@@ -6,7 +6,19 @@
 2. run 'npm start' to test it out locally
 3. To do a production build, run 'npm run build'
 
-# Bootstrapping the project.
+## Test it out locally
+npm start
+
+## Check out all components individually using [StoryBook](https://getstorybook.io/)
+npm run storybook
+Goto http://localhost:9009/ (OR whatever port it says)
+
+## Deploy to GITHub Pages
+npm run build
+npm run deploy
+
+
+# Bootstrapping the project
 This is how the project was created initially to get react to function.
 
 
@@ -40,6 +52,13 @@ getstorybook
 
 # Deployment on GITHub
 npm install --save-dev gh-pages
+
+# Using the material-ui library
+npm install material-ui
+
+# Flexbox
+# https://www.npmjs.com/package/react-layout-components
+npm install react-layout-components --save-dev
 
 # To actually deploy to GITHub run
 npm run deploy
