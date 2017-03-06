@@ -66,7 +66,7 @@ export default class RobotWebsocket {
     sendMessage(message, callback) {
 
         if (websocketInstance.socket) {
-            if (! ('message' in message)) {
+            if (! ('type' in message)) {
                 throw new Error("websocket message must contain 'type' key");
             }
 
@@ -114,9 +114,9 @@ export default class RobotWebsocket {
 
         msg = JSON.parse(msg);
 
-        console.log("Web Socket Received message: " + msg['message'].toUpperCase());
+        console.log("Web Socket Received message: " + msg['type'].toUpperCase());
 
-        msg['message'] = msg['message'].toUpperCase();
+        msg['type'] = msg['type'].toUpperCase();
         dispatcher.dispatch( msg )
     }
 

@@ -19,12 +19,12 @@ export default class CorePage extends React.Component {
     }
 
     startTalking = () => {
-        const msg = { 'message': 'send_state', 'enable': true, 'mps': 4 }
+        const msg = { 'type': 'send_state', 'enable': true, 'mps': 4 }
         RobotWebsocket.instance().sendMessage(msg)
     }
 
     stopTalking = () => {
-        const msg = { 'message': 'send_state', 'enable': false, 'mps': 4 }
+        const msg = { 'type': 'send_state', 'enable': false, 'mps': 4 }
         RobotWebsocket.instance().sendMessage(msg)
     }
 

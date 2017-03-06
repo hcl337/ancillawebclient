@@ -31,7 +31,7 @@ class StateStore extends EventEmitter {
     }
 
     handleActions(action) {
-        switch (action['message']) {
+        switch (action['type']) {
             case "STATE":
                 {
                     this.updateState(action.data);
