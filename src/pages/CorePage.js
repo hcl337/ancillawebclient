@@ -9,6 +9,7 @@ import { Page, Box } from 'react-layout-components'
 
 import VideoDisplayComponent from './corepage/VideoDisplayComponent'
 import ServoControllersComponent from './corepage/ServoControllersComponent'
+import * as ConnectionActions from '../actions/ConnectionActions'
 
 import Layout from './Layout'
 
@@ -18,14 +19,9 @@ export default class CorePage extends React.Component {
         this.state = {}
     }
 
-    startTalking = () => {
-        const msg = { 'type': 'send_state', 'enable': true, 'mps': 4 }
-        RobotWebsocket.instance().sendMessage(msg)
-    }
-
-    stopTalking = () => {
-        const msg = { 'type': 'send_state', 'enable': false, 'mps': 4 }
-        RobotWebsocket.instance().sendMessage(msg)
+    componentWillMount( ){
+      // When the core loads any time, connect and get things going
+      ConnectionActions.startTalking();
     }
 
     render() {
@@ -38,8 +34,8 @@ export default class CorePage extends React.Component {
               <ServoControllersComponent  />
             </Box>
             <Paper style={{minHeight:100, margin:5, padding:5}}>
-              <RaisedButton onClick={this.startTalking}>Talk</RaisedButton>
-              <RaisedButton onClick={this.stopTalking}>Stop</RaisedButton>
+              <RaisedButton onClick={ConnectionActions.startTalking}>Talk</RaisedButton>
+              <RaisedButton onClick={ConnectionActions.stopTalking}>Stop</RaisedButton>
             </Paper>
           </Box>
           </Layout>

@@ -2,9 +2,23 @@ import { EventEmitter } from "events";
 import dispatcher from '../dispatcher'
 
 class StateStore extends EventEmitter {
+
+    getState() {
+        return this.state;
+    }
+
+    getServos() {
+        return this.state.movement.servos;
+    }
+
+//--------------------------------------------------------------------------------
+//
+// HELPERS BELOW
+//
+//--------------------------------------------------------------------------------
+
     constructor() {
         super();
-        this.state = {};
 
         this.state = {
             
@@ -20,14 +34,6 @@ class StateStore extends EventEmitter {
     updateState(newState) {
         this.state = newState;
         this.emit('UPDATED');
-    }
-
-    getState() {
-        return this.state;
-    }
-
-    getServos() {
-        return this.state.movement.servos;
     }
 
     handleActions(action) {

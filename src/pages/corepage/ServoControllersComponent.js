@@ -22,12 +22,23 @@ export default class ServoControllersComponent extends React.Component {
         this.state = {
             servos: StateStore.getServos()
         }
+        // Need to bind to this so we have a single reference we
+        // can add and subtract.
+        this.updateState = this.updateState.bind(this)
+    }
+
+    updateState = () => {
+        //console.log("Upating " + this.props.name)
+        //console.log(StateStore.getServos())
+        this.setState({ 'servos': StateStore.getServos() });
     }
 
     componentWillMount() {
-        StateStore.on("UPDATED", () => {
-            this.setState({ 'servos': StateStore.getServos() });
-        })
+        StateStore.on("UPDATED", this.updateState)
+    }
+
+    componentWillUnmount() {
+        StateStore.removeListener("UPDATED", this.updateState)
     }
 
     render() {

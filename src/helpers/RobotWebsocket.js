@@ -50,10 +50,10 @@ export default class RobotWebsocket {
         if (websocketInstance != null &&
             websocketInstance.socket != null &&
             websocketInstance.socket.readyState === 1) {
-            console.log("isConnected - Websocket is connected.")
+            //console.log("isConnected - Websocket is connected.")
             return callbackSuccess();
         } else {
-            console.log("isConnected - Websocket is NOT connected.")
+            //console.log("isConnected - Websocket is NOT connected.")
             return callbackFailure();
         }
 
@@ -106,6 +106,8 @@ export default class RobotWebsocket {
         console.log("Received Web Socket error: " + evt.type + " " + evt.code + " " + evt.name + " " + evt.message);
         console.log(evt);
         websocketInstance.close();
+
+
     }
 
     onmessage(evt) {
@@ -114,7 +116,7 @@ export default class RobotWebsocket {
 
         msg = JSON.parse(msg);
 
-        console.log("Web Socket Received message: " + msg['type'].toUpperCase());
+        //console.log("Web Socket Received message: " + msg['type'].toUpperCase());
 
         msg['type'] = msg['type'].toUpperCase();
         dispatcher.dispatch( msg )
@@ -132,7 +134,11 @@ export default class RobotWebsocket {
                 websocketInstance.socket = null;
             }
             websocketInstance = null;
-        }        
+        }    
+
+        dispatcher.dispatch({
+            type: "SERVER_DISCONNECTED"
+        });            
 
         hashHistory.push('/login');
     }

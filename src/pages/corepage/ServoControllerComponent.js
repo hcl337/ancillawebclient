@@ -5,6 +5,7 @@ import Slider from 'material-ui/Slider'
 import Paper from 'material-ui/Paper'
 
 import StateStore from '../../stores/StateStore'
+import * as ServoActions from '../../actions/ServoActions'
 
 
 const styles = {
@@ -54,25 +55,35 @@ export default class ServoControllerComponent extends React.Component {
             requested_speed: StateStore.getServos()[this.props.name]['requested_speed'],
             requested_angle: StateStore.getServos()[this.props.name]['requested_angle'],
         }
+        // Need to bind to this so we have a single reference we
+        // can add and subtract.
+        this.updateState = this.updateState.bind(this)
     }
 
     onAngleSliderChange = (evt, value) => {
         this.setState({ requested_angle: value })
         console.log("Angle slider changed: " + this.state.requested_angle)
+        ServoActions.setAngle( this.props.name, value)
     }
 
     onSpeedSliderChange = (evt, value) => {
         this.setState({ requested_speed: value })
         console.log("Speed slider changed: " + this.state.requested_speed)
+        ServoActions.setSpeed( this.props.name, value)
     }
 
+    updateState = () => {
+        //console.log("Upating " + this.props.name)
+        //console.log(StateStore.getServos())
+        this.setState({ 'servo': StateStore.getServos()[this.props.name] });
+    }
 
     componentWillMount() {
-        StateStore.on("UPDATED", () => {    
-            //console.log("Upating " + this.props.name)
-            //console.log(StateStore.getServos())
-            this.setState({ 'servo': StateStore.getServos()[this.props.name] });
-        })
+        StateStore.on("UPDATED", this.updateState)
+    }
+
+    componentWillUnmount() {
+        StateStore.removeListener("UPDATED", this.updateState)
     }
 
 
@@ -84,8 +95,8 @@ export default class ServoControllerComponent extends React.Component {
                 <Box column >
                     <Box row style={styles.servoheaders}>
                         <p>{this.props.name}</p>
-                        <p>{this.state.servo.current_angle} deg</p>
-                        <p>{this.state.servo.current_speed} deg/s</p>
+                        <p>{this.state.servo.current_angle.toFixed(1)} deg</p>
+                        <p>{this.state.servo.current_speed.toFixed(1)} deg/s</p>
                     </Box>
                     <Box style={styles.slider}>
                         <p style={styles.servobounds}>{this.state.servo.min_angle} deg</p>

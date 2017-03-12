@@ -1,3 +1,4 @@
+/*
 import axios from 'axios';
 
 export function isAuthenticated(callbackSuccess, callbackFailure) {
@@ -94,3 +95,4 @@ export function unauthenticate(callback) {
             return callback(false);
         });
 }
+*/

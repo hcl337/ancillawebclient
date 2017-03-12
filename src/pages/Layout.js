@@ -5,11 +5,14 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 
 import { hashHistory } from 'react-router';
 
 import { unauthenticate } from '../helpers/RobotAuthenticate'
 import RobotWebsocket from '../helpers/RobotWebsocket'
+import * as ConnectionActions from '../actions/ConnectionActions'
+import ConnectionStore from '../stores/ConnectionStore'
 
 
 export default class Layout extends React.Component {
@@ -20,6 +23,7 @@ export default class Layout extends React.Component {
         this.state = {
             openDrawer: false
         };
+        this.updateConnection = this.updateConnection.bind(this)
     }
 
     handleToggle = () => {
@@ -28,19 +32,35 @@ export default class Layout extends React.Component {
 
     logOut = () => {
         this.setState({"openDrawer":false})
-        unauthenticate(function() {
-            hashHistory.push('/login');
-        });
+        ConnectionActions.logout();
+        //unauthenticate(function() {
+        //    hashHistory.push('/login');
+        //});
     }
 
     shutdown = () => {
         this.setState({"openDrawer":false})
 
-        const msg = { 'message': 'shutdown' }
-        RobotWebsocket.instance().sendMessage(msg, function() {
-            hashHistory.push('/login');
-        });
+        ConnectionActions.shutdownRobot();
 
+    }
+
+    // Each time the ConnectionStore changes, this wil lbe called and it
+    // will try to connect everything together.
+    updateConnection = () => {
+        if( ConnectionStore.getState() === 'SERVER_DISCONNECTED' )
+        {
+            console.log("Server disconnected so layout page moving to /login");
+            hashHistory.push('/login');
+        }
+    }    
+
+    componentWillMount() {
+        ConnectionStore.on("CHANGED", this.updateConnection)
+    }
+
+    componentWillUnmount() {
+        ConnectionStore.removeListener("CHANGED", this.updateConnection)
     }
 
     leftDrawer = () => {
@@ -54,8 +74,10 @@ export default class Layout extends React.Component {
                 <AppBar 
                     title="Controls" 
                     onTouchTap={this.handleToggle}/>
-                <MenuItem onTouchTap={this.logOut}>Log out</MenuItem>
                 <MenuItem onTouchTap={this.shutdown}>Shutdown Robot</MenuItem>
+                <Divider />
+                <MenuItem onTouchTap={this.logOut}>Log out</MenuItem>
+                <Divider />
             </Drawer>
         );
     }
